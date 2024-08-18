@@ -1,14 +1,14 @@
 import { Colors } from "@/constants/Colors";
 import CustomRegularText from "@/UI/Text/CustomRegularText";
 import CustomSemiBoldText from "@/UI/Text/CustomSemiBoldText";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { Pressable, ScrollView, TextInput, View } from "react-native";
 import { styles } from "./outfitForm.style";
 import Button from "../Button/Button";
 import AddImage from "./AddImage";
 import { router } from "expo-router";
 
-const OutfitForm = () => {
+const OutfitForm: FC<{ id?: string }> = ({ id }) => {
   const categories = [
     { value: "freeze", title: "🥶" },
     { value: "chill", title: "😣" },

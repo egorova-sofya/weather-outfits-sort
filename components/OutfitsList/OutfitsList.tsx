@@ -25,7 +25,13 @@ const OutfitsList: FC<Props> = ({ outfits }) => {
           data={outfits}
           renderItem={({ item }) => (
             <View key={item.id} style={styles.cardContainer}>
-              <Link style={styles.link} href="/" />
+              <Link
+                style={styles.link}
+                href={{
+                  pathname: "/outfit-details/[id]",
+                  params: { id: item.id },
+                }}
+              />
               <Image style={styles.card} source={{ uri: item.uri }} />
             </View>
           )}
