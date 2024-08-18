@@ -1,9 +1,8 @@
-import { Tabs } from "expo-router";
+import { Link, Tabs } from "expo-router";
 import React, { FC } from "react";
 import CustomRegularText from "@/UI/Text/CustomRegularText";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Colors } from "@/constants/Colors";
-import AddImage from "@/components/AddImage/AddImage";
 
 const CustomTabBar: FC<any> = ({ state, descriptors, navigation }) => {
   return (
@@ -63,7 +62,10 @@ const CustomTabBar: FC<any> = ({ state, descriptors, navigation }) => {
           );
         })}
       </View>
-      <AddImage />
+      <View style={styles.customButton}>
+        <Link href="/outfit-form" style={styles.link} />
+        <CustomRegularText style={styles.customButtonText}>+</CustomRegularText>
+      </View>
     </View>
   );
 };
@@ -119,5 +121,28 @@ const styles = StyleSheet.create({
   },
   buttonActive: {
     backgroundColor: Colors.darkGray,
+  },
+  customButton: {
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.black,
+    marginLeft: -4,
+    position: "relative",
+  },
+  link: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  customButtonText: {
+    color: Colors.white,
+    fontSize: 20,
+    lineHeight: 24,
+    height: 20,
   },
 });

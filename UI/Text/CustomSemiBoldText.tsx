@@ -13,6 +13,7 @@ const CustomSemiBoldText: FC<TextProps> = ({ children, style, ...props }) => {
 const styles = StyleSheet.create({
   text: {
     fontFamily: "PoppinsSemiBold",
+    fontWeight: "700",
     color: Colors.black,
     fontSize: 14,
     lineHeight: 18,

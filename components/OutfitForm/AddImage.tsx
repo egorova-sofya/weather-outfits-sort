@@ -2,8 +2,9 @@ import { Colors } from "@/constants/Colors";
 import useLoadImage from "@/hooks/useLoadImage";
 import CustomRegularText from "@/UI/Text/CustomRegularText";
 import React, { useEffect, useState } from "react";
-import { Alert, Pressable, StyleSheet } from "react-native";
+import { Alert, Pressable, View } from "react-native";
 import * as MediaLibrary from "expo-media-library";
+import { styles } from "./outfitForm.style";
 
 const AddImage = () => {
   const { image, pickImage, launchCamera } = useLoadImage({});
@@ -56,33 +57,20 @@ const AddImage = () => {
       ],
       {
         cancelable: true,
+        onDismiss: () => setShowAlert(false),
       }
     );
   }
 
   return (
-    <Pressable onPress={() => setShowAlert(true)} style={styles.customButton}>
-      <CustomRegularText style={styles.customButtonText}>+</CustomRegularText>
-    </Pressable>
+    <View style={styles.inputWrapper}>
+      <CustomRegularText style={styles.label}>Добавь фото</CustomRegularText>
+
+      <Pressable onPress={() => setShowAlert(true)} style={styles.addTextBtn}>
+        <CustomRegularText style={styles.addImageText}>➕</CustomRegularText>
+      </Pressable>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  customButton: {
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.black,
-    marginLeft: -4,
-  },
-  customButtonText: {
-    color: Colors.white,
-    fontSize: 20,
-    lineHeight: 24,
-    height: 20,
-  },
-});
 
 export default AddImage;

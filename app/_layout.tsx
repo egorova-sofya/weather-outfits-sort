@@ -29,16 +29,15 @@ export default function RootLayout() {
     <View style={{ flex: 1 }}>
       <StatusBar style="light" />
       <SafeAreaProvider>
-        <Stack>
-          <Stack.Screen
-            name="(tabs)"
-            options={{
-              headerShown: false,
-              contentStyle: {
-                backgroundColor: "transparent",
-              },
-            }}
-          />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: "transparent",
+            },
+          }}
+        >
+          <Stack.Screen name="(tabs)" />
           <Stack.Screen name="+not-found" />
         </Stack>
       </SafeAreaProvider>
