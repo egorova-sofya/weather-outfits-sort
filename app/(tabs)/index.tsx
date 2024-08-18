@@ -1,22 +1,11 @@
-import { Image, StyleSheet, View, Pressable, Alert } from "react-native";
-import * as FileSystem from "expo-file-system";
+import { StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
-import useLoadImage from "@/hooks/useLoadImage";
-import CustomSemiBoldText from "@/UI/Text/CustomSemiBoldText";
 import * as MediaLibrary from "expo-media-library";
+import OutfitsList from "@/components/OutfitsList/OutfitsList";
+import MainLayout from "@/components/Layouts/MainLayout";
 
 export default function HomeScreen() {
-  const { image, pickImage, launchCamera } = useLoadImage({});
-  const [showAlert, setShowAlert] = useState(false);
-  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
   const [imagesAssets, setImagesAssets] = useState<MediaLibrary.Asset[]>([]);
-
-  // const getImages = async () => {
-  //   const { assets } = await MediaLibrary.getAssetsAsync();
-  //   setImagesAssets(assets);
-  // };
-
-  console.log("imagesAssets", imagesAssets);
 
   const getImagesFromAlbum = async () => {
     try {
@@ -27,10 +16,10 @@ export default function HomeScreen() {
 
       if (album) {
         const assets = await MediaLibrary.getAssetsAsync({
-          album: album.id, // Get only assets in the album
+          album: album.id,
         });
         setImagesAssets(assets.assets);
-        console.log("Images from album:", assets); // Debugging output
+        console.log("Images from album:", assets);
       } else {
         console.warn("Album not found!");
       }
@@ -43,70 +32,12 @@ export default function HomeScreen() {
     getImagesFromAlbum();
   }, []);
 
-  const saveImageToMediaLibrary = async (imageUri) => {
-    if (permissionResponse?.status !== "granted") {
-      await requestPermission();
-    }
-    try {
-      const asset = await MediaLibrary.createAssetAsync(imageUri);
-      const album = await MediaLibrary.createAlbumAsync(
-        "weather-outfits-sort",
-        asset,
-        false
-      );
-      console.log("Image saved to Media Library:");
-    } catch (error) {
-      console.error("Error saving to Media Library:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (image) {
-      saveImageToMediaLibrary(image);
-    }
-  }, [image]);
-
-  if (showAlert) {
-    Alert.alert(
-      "Alert Title",
-      "My Alert Msg",
-      [
-        {
-          text: "Выбрать из галереи",
-          onPress: () => {
-            setShowAlert(false);
-            pickImage();
-          },
-        },
-        {
-          text: "Сфотографировать",
-          onPress: () => {
-            setShowAlert(false);
-            launchCamera();
-          },
-          style: "cancel",
-        },
-      ],
-      {
-        cancelable: true,
-      }
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      <Pressable onPress={() => setShowAlert(true)}>
-        <CustomSemiBoldText>Pick Image</CustomSemiBoldText>
-      </Pressable>
-      {imagesAssets.length > 0 &&
-        imagesAssets.map((image) => (
-          <Image
-            style={styles.image}
-            source={{ uri: image.uri }}
-            key={image.id}
-          />
-        ))}
-    </View>
+    <MainLayout>
+      <View style={styles.container}>
+        <OutfitsList outfits={imagesAssets} />
+      </View>
+    </MainLayout>
   );
 }
 
