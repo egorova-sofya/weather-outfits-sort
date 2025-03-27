@@ -7,17 +7,46 @@ import { styles } from "./outfitForm.style";
 import Button from "../Button/Button";
 import AddImage from "./AddImage";
 import { router } from "expo-router";
-import { TCategory } from "@/types";
+import { IOutfit } from "@/types/types";
+import { categories } from "@/constants";
 
-const OutfitForm: FC<{ id?: string }> = ({ id }) => {
-  const categories = [
-    { value: "freeze", title: "🥶" },
-    { value: "chill", title: "😣" },
-    { value: "neutral", title: "🙂" },
-    { value: "warm", title: "😎" },
-    { value: "hot", title: "🥵" },
-  ] as { value: TCategory; title: string }[];
-  const [category, setCategory] = useState(categories[0].value);
+interface Props {
+  onSubmit: (values: FormData) => void;
+  initialValues?: IOutfit;
+}
+
+const OutfitForm: FC<Props> = ({ onSubmit, initialValues }) => {
+  const [values, setValues] = useState<IOutfit>(
+    initialValues || {
+      image: "",
+      description: "",
+      category: categories[0].value,
+    }
+  );
+
+  const handleValues = (value: any, key: keyof IOutfit) => {
+    if (values) {
+      setValues({ ...values, [key]: value });
+    } else {
+      setValues({ [key]: value } as IOutfit);
+    }
+  };
+
+  const handleSubmit = () => {
+    const form = new FormData();
+
+    form.append("description", values.description);
+    form.append("category", values.category);
+
+    form.append("image", {
+      uri: values.image.uri,
+      name: values.image.fileName,
+      filename: values.image.fileName,
+      type: values.image.mimeType,
+    } as any);
+
+    onSubmit(form);
+  };
 
   return (
     <ScrollView
@@ -32,7 +61,10 @@ const OutfitForm: FC<{ id?: string }> = ({ id }) => {
         Создание нового образа
       </CustomSemiBoldText>
       <View style={styles.inputsWrapper}>
-        <AddImage />
+        <AddImage
+          image={values?.image}
+          setImage={(value) => handleValues(value, "image")}
+        />
 
         <View style={styles.inputWrapper}>
           <CustomRegularText style={styles.label}>
@@ -44,9 +76,11 @@ const OutfitForm: FC<{ id?: string }> = ({ id }) => {
                 key={item.value}
                 style={[
                   styles.category,
-                  item.value === category && { backgroundColor: Colors.gray },
+                  item.value === values.category && {
+                    backgroundColor: Colors.gray,
+                  },
                 ]}
-                onPress={() => setCategory(item.value)}
+                onPress={() => handleValues(item.value, "category")}
               >
                 <CustomRegularText style={styles.categoryText}>
                   {item.title}
@@ -61,10 +95,18 @@ const OutfitForm: FC<{ id?: string }> = ({ id }) => {
             Добавь описание (необязательно)
           </CustomRegularText>
 
-          <TextInput multiline={true} numberOfLines={4} style={styles.input} />
+          <TextInput
+            value={values.description}
+            onChangeText={(value) => handleValues(value, "description")}
+            multiline={true}
+            numberOfLines={4}
+            style={styles.input}
+          />
         </View>
 
-        <Button style={styles.saveBtn}>Сохранить</Button>
+        <Button onPress={handleSubmit} style={styles.saveBtn}>
+          Сохранить
+        </Button>
       </View>
     </ScrollView>
   );

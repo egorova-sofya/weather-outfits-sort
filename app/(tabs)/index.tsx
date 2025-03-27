@@ -4,7 +4,7 @@ import * as MediaLibrary from "expo-media-library";
 import OutfitsList from "@/components/OutfitsList/OutfitsList";
 import MainLayout from "@/components/Layouts/MainLayout";
 import { useSQLiteContext } from "expo-sqlite";
-import { IOutfit } from "@/types";
+import { IOutfit } from "@/types/types";
 import Button from "@/components/Button/Button";
 import { API } from "@/lib/api";
 
@@ -51,13 +51,9 @@ export default function HomeScreen() {
   //   getImagesFromAlbum();
   // }, []);
 
-  const [send, { data }] = API.useLazyGetOutfitsQuery();
-
   return (
     <MainLayout>
       <View style={styles.container}>
-        <Button onPress={() => send()}>Send</Button>
-
         <OutfitsList outfits={outfits} />
       </View>
     </MainLayout>

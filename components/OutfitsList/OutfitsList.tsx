@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import Spinner from "@/UI/Spinner/Spinner";
 import CustomRegularText from "@/UI/Text/CustomRegularText";
 import { Link } from "expo-router";
-import { IOutfit } from "@/types";
+import { IOutfit } from "@/types/types";
 
 interface Props {
   outfits?: IOutfit[];
@@ -32,7 +32,7 @@ const OutfitsList: FC<Props> = ({ outfits }) => {
                   params: { id: item.id },
                 }}
               />
-              <Image style={styles.card} source={{ uri: item.imageUri }} />
+              <Image style={styles.card} source={{ uri: item.image }} />
             </View>
           )}
           keyExtractor={(item) => item.id.toString()}

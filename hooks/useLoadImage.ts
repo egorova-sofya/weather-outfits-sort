@@ -13,10 +13,13 @@ import { Alert } from "react-native";
 interface Props {
   aspect?: [number, number];
   quality?: number;
+  initalValue?: ImagePickerAsset;
 }
 
-const useLoadImage = ({ aspect = [1, 2], quality = 1 }: Props) => {
-  const [image, setImage] = useState<null | ImagePickerAsset>(null);
+const useLoadImage = ({ aspect = [1, 2], quality = 1, initalValue }: Props) => {
+  const [image, setImage] = useState<null | ImagePickerAsset>(
+    initalValue || null
+  );
   const [cameraPermissionInformation, requestPermission] =
     useCameraPermissions();
 
@@ -42,7 +45,6 @@ const useLoadImage = ({ aspect = [1, 2], quality = 1 }: Props) => {
     });
 
     if (!result.canceled) {
-      console.log("result", result);
       setImage(result.assets[0]);
     }
   };

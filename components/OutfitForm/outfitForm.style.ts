@@ -36,6 +36,13 @@ export const styles = StyleSheet.create({
     fontSize: 40,
     lineHeight: 48,
   },
+  image: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    width: "45%",
+    aspectRatio: 1 / 1.5,
+  },
   categories: {
     flexDirection: "row",
   },
