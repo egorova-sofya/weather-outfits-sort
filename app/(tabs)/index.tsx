@@ -3,9 +3,15 @@ import { useEffect, useState } from "react";
 import * as MediaLibrary from "expo-media-library";
 import OutfitsList from "@/components/OutfitsList/OutfitsList";
 import MainLayout from "@/components/Layouts/MainLayout";
+import { useSQLiteContext } from "expo-sqlite";
+import { IOutfit } from "@/types";
+import Button from "@/components/Button/Button";
+import { API } from "@/lib/api";
 
 export default function HomeScreen() {
-  const [imagesAssets, setImagesAssets] = useState<MediaLibrary.Asset[]>([]);
+  const [outfits, setOutfits] = useState<IOutfit[]>([]);
+
+  const db = useSQLiteContext();
 
   const getImagesFromAlbum = async () => {
     try {
@@ -18,7 +24,20 @@ export default function HomeScreen() {
         const assets = await MediaLibrary.getAssetsAsync({
           album: album.id,
         });
-        setImagesAssets(assets.assets);
+
+        try {
+          const allRows: IOutfit[] = await db.getAllAsync(
+            "SELECT * FROM images"
+          );
+          let finalArr: IOutfit[] = [];
+          assets.assets.forEach((asset) => {
+            finalArr = allRows.filter((row) => row.fileName === asset.filename);
+          });
+
+          setOutfits(finalArr);
+        } catch (error) {
+          console.error("Error getAll fn", error);
+        }
         console.log("Images from album:", assets);
       } else {
         console.warn("Album not found!");
@@ -28,14 +47,18 @@ export default function HomeScreen() {
     }
   };
 
-  useEffect(() => {
-    getImagesFromAlbum();
-  }, []);
+  // useEffect(() => {
+  //   getImagesFromAlbum();
+  // }, []);
+
+  const [send, { data }] = API.useLazyGetOutfitsQuery();
 
   return (
     <MainLayout>
       <View style={styles.container}>
-        <OutfitsList outfits={imagesAssets} />
+        <Button onPress={() => send()}>Send</Button>
+
+        <OutfitsList outfits={outfits} />
       </View>
     </MainLayout>
   );

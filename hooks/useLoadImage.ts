@@ -4,6 +4,8 @@ import {
   useCameraPermissions,
   PermissionStatus,
   launchCameraAsync,
+  ImagePickerResult,
+  ImagePickerAsset,
 } from "expo-image-picker";
 import { useState } from "react";
 import { Alert } from "react-native";
@@ -13,8 +15,8 @@ interface Props {
   quality?: number;
 }
 
-const useLoadImage = ({ aspect = [2, 2], quality = 0.5 }: Props) => {
-  const [image, setImage] = useState<null | string>(null);
+const useLoadImage = ({ aspect = [1, 2], quality = 1 }: Props) => {
+  const [image, setImage] = useState<null | ImagePickerAsset>(null);
   const [cameraPermissionInformation, requestPermission] =
     useCameraPermissions();
 
@@ -40,7 +42,8 @@ const useLoadImage = ({ aspect = [2, 2], quality = 0.5 }: Props) => {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      console.log("result", result);
+      setImage(result.assets[0]);
     }
   };
 
@@ -64,7 +67,7 @@ const useLoadImage = ({ aspect = [2, 2], quality = 0.5 }: Props) => {
     if (!result.canceled) {
       // setModalVisible(false);
 
-      setImage(result.assets[0].uri);
+      setImage(result.assets[0]);
     }
   };
 

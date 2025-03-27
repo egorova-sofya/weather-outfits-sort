@@ -7,6 +7,7 @@ import { styles } from "./outfitForm.style";
 import Button from "../Button/Button";
 import AddImage from "./AddImage";
 import { router } from "expo-router";
+import { TCategory } from "@/types";
 
 const OutfitForm: FC<{ id?: string }> = ({ id }) => {
   const categories = [
@@ -15,7 +16,7 @@ const OutfitForm: FC<{ id?: string }> = ({ id }) => {
     { value: "neutral", title: "🙂" },
     { value: "warm", title: "😎" },
     { value: "hot", title: "🥵" },
-  ];
+  ] as { value: TCategory; title: string }[];
   const [category, setCategory] = useState(categories[0].value);
 
   return (

@@ -6,6 +6,9 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { View } from "react-native";
+import { SQLiteProvider } from "expo-sqlite";
+import { Provider } from "react-redux";
+import { store } from "@/lib/store";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,21 +29,25 @@ export default function RootLayout() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <StatusBar style="light" />
-      <SafeAreaProvider>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: {
-              backgroundColor: "transparent",
-            },
-          }}
-        >
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </SafeAreaProvider>
-    </View>
+    <Provider store={store}>
+      <View style={{ flex: 1 }}>
+        <SQLiteProvider databaseName="weather-outfits.db">
+          <StatusBar style="light" />
+          <SafeAreaProvider>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: {
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </SafeAreaProvider>
+        </SQLiteProvider>
+      </View>
+    </Provider>
   );
 }

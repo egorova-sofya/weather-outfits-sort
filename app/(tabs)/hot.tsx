@@ -1,5 +1,5 @@
 import CustomRegularText from "@/UI/Text/CustomRegularText";
-import { StyleSheet, Image, Platform, View } from "react-native";
+import { StyleSheet, Image, Platform, View, Touchable } from "react-native";
 
 export default function ChillScreen() {
   return (

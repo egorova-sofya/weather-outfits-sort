@@ -1,12 +1,12 @@
 import { StyleSheet, View, Image, FlatList } from "react-native";
 import React, { FC } from "react";
-import * as MediaLibrary from "expo-media-library";
 import Spinner from "@/UI/Spinner/Spinner";
 import CustomRegularText from "@/UI/Text/CustomRegularText";
 import { Link } from "expo-router";
+import { IOutfit } from "@/types";
 
 interface Props {
-  outfits?: MediaLibrary.Asset[];
+  outfits?: IOutfit[];
 }
 
 const OutfitsList: FC<Props> = ({ outfits }) => {
@@ -32,10 +32,10 @@ const OutfitsList: FC<Props> = ({ outfits }) => {
                   params: { id: item.id },
                 }}
               />
-              <Image style={styles.card} source={{ uri: item.uri }} />
+              <Image style={styles.card} source={{ uri: item.imageUri }} />
             </View>
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           numColumns={2}
           contentContainerStyle={{
             gap: 8,
